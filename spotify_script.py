@@ -1,11 +1,19 @@
 import os
 import sys
 import json
+import pprint
 import spotipy
 from spotipy import util
+from dotenv import load_dotenv
 
 # main.py imports
 from main import show_tracks, get_artist
+
+# Setting env variables for spotify web api (required)
+load_dotenv()
+os.environ.get("SPOTIPY_CLIENT_ID")
+os.environ.get("SPOTIPY_CLIENT_SECRET")
+os.environ.get("SPOTIPY_REDIRECT_URI")
 
 # Getting the username from terminal
 if len(sys.argv) > 1:
@@ -42,7 +50,8 @@ while True:
     print("1 - See your top tracks!")
     print("2 - See your top artists!")
     print("3 - See top tracks of any artist you want!")
-    print("4 - Exit")
+    print("4 - Want to make a list of artists and save those songs for later? Pick me!")
+    print("5 - Exit")
 
     choice = input("Your choice: ")
     if choice == "0":
@@ -104,8 +113,35 @@ while True:
             print(track['name'])
 
     elif choice == "4":
+        print(">>> This choice is a bit different, let me explain!")
+        print(">>> I'm going to add all of the artists (and songs) you want to safe place!")
+        print(">>> All you need to do is type one by one the name of the artists, and then I'll show 20 songs of those"
+              " artists")
+        print(">>> 'Yes' if you want to continue adding artists, 'No' if you are done.")
+        question = input("Name of the artist: ")
+        question_flag = True
+        while question_flag:
+            continue_question = input("Do you want to continue adding artists?  (y/N)  ")
+            artists_names = [question]
+            if continue_question == "y" or continue_question == "yes" or continue_question == "Yes":
+                add_artist = input("Add other artist: ")
+                artists_names.append(add_artist)
+                continue
+            elif continue_question == 'n' or continue_question == "no" or continue_question == "No":
+                question_flag = False
+                print(artists_names)
+                for artist in artists_names:
+                    results = sp.search(q=artist, limit=20)
+                    for i, t in enumerate(results['tracks']['items']):
+                        print(' ', i, t['name'])
+                    break
+            else:
+                print("That's not a valid choice!")
+
+    elif choice == "5":
         print("Run this script again if you want to interact with me!")
         print("Bye.")
+        break
 
     else:
         print("Please insert a correct option.")
