@@ -120,21 +120,21 @@ while True:
         print(">>> 'Yes' if you want to continue adding artists, 'No' if you are done.")
         question = input("Name of the artist: ")
         question_flag = True
+        artists_names = [question]
         while question_flag:
             continue_question = input("Do you want to continue adding artists?  (y/N)  ")
-            artists_names = [question]
             if continue_question == "y" or continue_question == "yes" or continue_question == "Yes":
                 add_artist = input("Add other artist: ")
                 artists_names.append(add_artist)
                 continue
             elif continue_question == 'n' or continue_question == "no" or continue_question == "No":
                 question_flag = False
-                print(artists_names)
                 for artist in artists_names:
+                    print(artist)
                     results = sp.search(q=artist, limit=20)
                     for i, t in enumerate(results['tracks']['items']):
                         print(' ', i, t['name'])
-                    break
+                break
             else:
                 print("That's not a valid choice!")
 
