@@ -124,7 +124,7 @@ while True:
     elif choice == "4":
         print(">>> This choice is a bit different, nothing difficult tho, let me explain!")
         print(">>> I'm going to add all of the artists (and songs) you want, to a safe place!")
-        print(">>> All you need to do is type one by one the name of the artists, and then I'll show 20 songs of those"
+        print(">>> All you need to do is type one by one the name of the artists, and then I'll show 50 songs of those"
               " artists")
         print(">>> 'Yes' if you want to continue adding artists, 'No' if you are done.")
         question = input("Name of the artist: ")
@@ -140,7 +140,7 @@ while True:
                 question_flag = False
                 for artist in artists_names:
                     print(">>> This is " + artist.capitalize())
-                    results = sp.search(q=artist, limit=20)
+                    results = sp.search(q=artist, limit=50)
                     for i, t in enumerate(results['tracks']['items']):
                         track_names = t['name']
                         tracks_model = model(name=track_names)
