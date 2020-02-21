@@ -19,3 +19,6 @@ def get_artist(name, sp):
         return items[0]
     else:
         return None
+
+# print(json.dumps(t['name'], sort_keys=True, indent=4))
+# Esta linea es para traer el dump verdadero del api

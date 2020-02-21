@@ -1,13 +1,22 @@
 import os
 import sys
-import json
-import pprint
+from sqlalchemy.orm import sessionmaker
 import spotipy
 from spotipy import util
 from dotenv import load_dotenv
 
 # main.py imports
 from main import show_tracks, get_artist
+
+# db_link.py imports
+from db_link import Tracks, engine_creation, base_metadata
+
+# Tracks model initialization and engine creation
+base_metadata()
+model = Tracks
+engine = engine_creation()
+Session = sessionmaker(bind=engine)
+session = Session()
 
 # Setting env variables for spotify web api (required)
 load_dotenv()
@@ -113,8 +122,8 @@ while True:
             print(track['name'])
 
     elif choice == "4":
-        print(">>> This choice is a bit different, let me explain!")
-        print(">>> I'm going to add all of the artists (and songs) you want to safe place!")
+        print(">>> This choice is a bit different, nothing difficult tho, let me explain!")
+        print(">>> I'm going to add all of the artists (and songs) you want, to a safe place!")
         print(">>> All you need to do is type one by one the name of the artists, and then I'll show 20 songs of those"
               " artists")
         print(">>> 'Yes' if you want to continue adding artists, 'No' if you are done.")
@@ -130,9 +139,13 @@ while True:
             elif continue_question == 'n' or continue_question == "no" or continue_question == "No":
                 question_flag = False
                 for artist in artists_names:
-                    print(artist)
+                    print(">>> This is " + artist.capitalize())
                     results = sp.search(q=artist, limit=20)
                     for i, t in enumerate(results['tracks']['items']):
+                        track_names = t['name']
+                        tracks_model = model(name=track_names)
+                        session.add(tracks_model)
+                        session.commit()
                         print(' ', i, t['name'])
                 break
             else:
